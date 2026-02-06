@@ -9,7 +9,7 @@ app.use("/test",(req , res) => {
     res.end("Welcome to the server");
 });
 app.use("/",(req , res) => {
-    res.end("access to the server");
+    res.end("access is given ");
 });
 
 app.listen(7777, () =>{
