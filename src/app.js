@@ -2,33 +2,21 @@ const express = require("express");
 
 const app = express();
 
-app.use(
-    "/user" , 
-    (req , res , next) => {
-    console.log("sending message for the router");
-    // res.send("this is route no. 1");
-    next();
-},(req , res , next) => {
-    console.log("sending message for the router again");
+app.use("/" , (req , res , next) => {
+    // console.log("the messare is sending to the router");
     // res.send("this is route no. 2");
     next();
-}, (req , res , next) => {
-    console.log("sending message for the router again");
-    // res.send("this is route no. 3");
-    next();
-}, (req , res , next) => {
-    console.log("sending message for the router again");
-    // res.send("this is route no. 4");
-    next();
-}, (req , res , next) => {
-    console.log("sending message for the router again");
-    // res.send("this is route no. 5");
-    next();
-}, (req , res) => {
-    console.log("sending message for the router again");
-    res.send("this is route no. 6");
 });
 
+app.get("/user",
+    (req , res , next) => {
+    console.log("handling /user route");
+    next();
+}, (req , res , next) => {
+    next();
+} , (req , res , next) => {
+    res.send("2nd route handler");
+});
 app.listen(7777, () =>{
     console.log("server is sucessfully working");
 });
