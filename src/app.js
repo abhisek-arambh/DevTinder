@@ -3,12 +3,10 @@ const express = require("express");
 const app = express();
 
 app.use("/getUserData" , (req , res) => {
-    throw new error("dsfgdhjk");
+    try{
+        throw new error("dsfgdhjk");
         res.send("Deleted a User");
-});
-
-app.use("/" , (err , req , res , next) =>{
-    if(err) {
+    }catch (err){
         res.status(500).send("something went wrong");
     }
 });
