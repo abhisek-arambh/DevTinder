@@ -2,21 +2,26 @@ const express = require("express");
 
 const app = express();
 
-app.use("/" , (req , res , next) => {
-    // console.log("the messare is sending to the router");
-    // res.send("this is route no. 2");
-    next();
+app.use("/admin/GetAllData" , (req , res , next) => {
+    const token = "xyz";
+    const isAdminAuthorised = token === "xyz";
+    if (isAdminAuthorised){
+        res.send("All data is clear");
+    }else{
+        res.status(401).send("Admin is not atuthorised");
+    }
 });
 
-app.get("/user",
-    (req , res , next) => {
-    console.log("handling /user route");
-    next();
-}, (req , res , next) => {
-    next();
-} , (req , res , next) => {
-    res.send("2nd route handler");
+app.use("/admin/DeleteUser" , (req , res , next) => {
+    const token = "xyz";
+    const isAdminAuthorised = token === "xyz";
+    if (isAdminAuthorised){
+        res.send("Deleted a User");
+    }else{
+        res.status(401).send("Admin is not atuthorised");
+    }
 });
+
 app.listen(7777, () =>{
     console.log("server is sucessfully working");
 });
