@@ -3,22 +3,17 @@ const connectDb = require("./config/database");
 const app = express();
 const User = require("./models/user");
 
+app.use(express.json());
+
 app.post("/signup", async (req , res) =>{
-    const user = new User({
-        firstName : "Abhisek",
-        lastName : "Singh",
-        emailId : "abhisek02feb@gmail.com",
-        password :"Abhi@123",
-        age : 22,
-        gender : "male",
-    });
+    const user = new User(req.body);
     try{
     await user.save();
     res.send("user added successfully");
     }catch(err){
         res.status(404).send("error while adding user:" + err.message);
     }
-})
+});
 
 connectDb()
 .then(() => {
@@ -28,5 +23,5 @@ connectDb()
     }); 
 })
 .catch((err) =>{
-    console.error("database cannot be connected!");
+    console.error("database cannot be connected!", err);
 });
