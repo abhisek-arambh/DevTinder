@@ -17,19 +17,39 @@ app.post("/signup", async (req , res) =>{
 });
 
 app.get("/users", async (req , res) =>{
-    const userEmail = req.body.emailId;
+    const userEmail = req.body.firstName;
 
     try{
-        const user = await User.find({emailId : userEmail});
-        if(user.length === 0){
+        const user = await User.findOne({firstName : userEmail});
+        if(!user){
             return res.status(404).send("user not found");
         }else{
             res.send(user);
         }
+        // if(user.length === 0){
+        //     return res.status(404).send("user not found");
+        // }else{
+        //     res.send(user);
+        // }
     }catch (err){
         res.status(404).send("Something went wrong");
     }
 });
+
+// app.get("/users", async (req , res) =>{
+//     const userEmail = req.body.emailId;
+
+//     try{
+//         const user = await User.find({emailId : userEmail});
+//         if(user.length === 0){
+//             return res.status(404).send("user not found");
+//         }else{
+//             res.send(user);
+//         }
+//     }catch (err){
+//         res.status(404).send("Something went wrong");
+//     }
+// });
 
 app.get("/feed", async(req , res) =>{
 
