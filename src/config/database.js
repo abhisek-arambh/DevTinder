@@ -1,8 +1,13 @@
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+
+dotenv.config();    
+
+
 
 const connectDb = async() =>{
     await mongoose.connect(
-        "mongodb+srv://abhisek02feb2004singh_db_user:NmjSSxu.h3pYSYA@devtinder.za0jxbj.mongodb.net/"
+        process.env.mongoBD,
     );
 };
 
