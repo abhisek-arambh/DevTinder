@@ -16,24 +16,24 @@ app.post("/signup", async (req , res) =>{
     }
 });
 
-// app.get("/users", async (req , res) =>{
-//     const userEmail = req.body.firstName;
-//     try{
-//         const user = await User.findOne({firstName : userEmail});
-//         if(!user){
-//             return res.status(404).send("user not found");
-//         }else{
-//             res.send(user);
-//         }
-//         // if(user.length === 0){
-//         //     return res.status(404).send("user not found");
-//         // }else{
-//         //     res.send(user);
-//         // }
-//     }catch (err){
-//         res.status(404).send("Something went wrong");
-//     }
-// });
+app.get("/users", async (req , res) =>{
+    const userEmail = req.body.firstName;
+    try{
+        const user = await User.findOne({firstName : userEmail});
+        if(!user){
+            return res.status(404).send("user not found");
+        }else{
+            res.send(user);
+        }
+        if(user.length === 0){
+            return res.status(404).send("user not found");
+        }else{
+            res.send(user);
+        }
+    }catch (err){
+        res.status(404).send("Something went wrong");
+    }
+});
 
 app.get("/users", async (req , res) =>{
     const userEmail = req.body.emailId;
@@ -78,7 +78,7 @@ app.patch("/update/:userId", async(req , res) =>{
     const updateData = req.body;
 
     try {
-        const ALLOUDED_UPDATES = ["firstName", "lastName", "skills", "password"];
+        const ALLOUDED_UPDATES = ["firstName", "lastName", "skills", "password", "age", "photoUrl", "bio"];
         const isUpdateAllowed = Object.keys(updateData).every((k)=> 
         ALLOUDED_UPDATES.includes(k)
     );

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require("validator");
 
 const userSchema = new mongoose.Schema(
     {
@@ -19,10 +20,29 @@ const userSchema = new mongoose.Schema(
             unique: true,
             lowercase: true,
             trim: true,
+            validate(value){
+                if(!validator.isEmail(value)){
+                    throw new Error ("email is not valid");
+                }else{
+                    return value;
+                }
+            }
         },
         password: {
             type: String,
             required: true,
+            validate(value){
+                if(!validator.isStrongPassword(value, {
+                    minLength: 8, 
+                    minLowercase: 1,
+                    minUppercase: 1, 
+                    minNumbers: 1, 
+                    minSymbols: 1})){
+                    throw new Error ("password is not strong enough");
+                }else{
+                    return value;
+                }
+            }
         },gender: {
             validate(value){
                 if(!["male" , "female" , "others"].includes(value)){
@@ -38,14 +58,21 @@ const userSchema = new mongoose.Schema(
             type: Number,
             min :18,
             max : 70,
-            required: true,
+            // required: true,
         },photoUrl: {
             default:"https://i.pinimg.com/736x/6e/59/95/6e599501252c23bcf02658617b29c894.jpg",
             type: String,
             required: true,
+            validate(value){
+                if(!validator.isURL(value)){
+                    throw new Error ("photoUrl is not valid");
+                }else{
+                    return value;
+                }
+            },
         },bio: {
             type: String,
-            required: true,
+            // required: true,
         },skills: {
             type: [String],
             required: true,
