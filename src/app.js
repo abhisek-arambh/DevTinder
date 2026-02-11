@@ -18,7 +18,6 @@ app.post("/signup", async (req , res) =>{
 
 // app.get("/users", async (req , res) =>{
 //     const userEmail = req.body.firstName;
-
 //     try{
 //         const user = await User.findOne({firstName : userEmail});
 //         if(!user){
@@ -78,10 +77,16 @@ app.patch("/update", async(req , res) =>{
     const userId = req.body.userId;
     const updateData = req.body;
     try{
-        await User.findByIdAndUpdate({_id: userId}, updateData, {new : true});
-        res.send("user updated successfully");
+        const updatedUser = await User.findByIdAndUpdate({_id: userId}, updateData, {
+        returnDocument : "after",
+        runValidators : true,
+        new : true,
+    });
+    console.log(updatedUser);
+    res.send("user updated successfully");
+
     }catch(err){
-        res.status(404).send("something went wrong");
+        res.status(404).send("Update failed:" + err.message);
     }
 });
 
