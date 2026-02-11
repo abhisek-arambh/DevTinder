@@ -32,23 +32,23 @@ const userSchema = new mongoose.Schema(
                 }
             },
             type: String,
-            // required: true,
+            required: true,
             trim: true,
         },age: {
             type: Number,
             min :18,
             max : 70,
-            // required: true,
+            required: true,
         },photoUrl: {
             default:"https://i.pinimg.com/736x/6e/59/95/6e599501252c23bcf02658617b29c894.jpg",
             type: String,
-            // required: true,
+            required: true,
         },bio: {
             type: String,
-            // required: true,
+            required: true,
         },skills: {
             type: [String],
-            // required: true,
+            required: true,
         }
     },
     { timestamps: true }
