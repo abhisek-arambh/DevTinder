@@ -14,7 +14,6 @@ try {
     const {firstName, lastName, emailId, gender, password} = req.body;
     const hashedPassward = await bcrypt.hash(password, 10);
     console.log(hashedPassward);
-    req.body.password = hashedPassward;
 
     const user = new User({
       firstName,
@@ -30,6 +29,26 @@ try {
     res.status(404).send("ERROR :" + err.message);
 }
 });
+
+app.post("/login", async (req, res) => {
+
+  try{
+    const { emailId, password } = req.body;
+
+    const user = await User.findOne({emailId: emailId});
+    if (!user){
+      throw new Error ("Invalid Credentials");
+    }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid){
+      throw new Error("Invalid Password");
+    }else{
+      res.send("login successfull");
+    }
+  }catch (err) {
+    res.status(404).send("ERROR :"+ err.message);
+  }
+})
 
 app.get("/users", async (req, res) => {
   const userEmail = req.body.firstName;
