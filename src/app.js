@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const connectDb = require("./config/database");
+const connectDb = require ("./config/database");
 const app = express();
 const User = require("./models/user");
 const { validateSignUpData } = require("./utils/validation");
@@ -46,9 +46,9 @@ app.post("/login", async (req, res) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (isPasswordValid){
 
-      const token = jwt.sign({userId: user._id}, "secretKey");
+      const token = jwt.sign({userId: user._id}, "secretKey", {expiresIn: "1d"});
 
-      res.cookie("token", token);
+      res.cookie("token", token ,{expires: new Date (Date.now() + 8 * 3600000)});
       res.send("login successfull");
     }else{
       throw new Error("Invalid Password");
@@ -67,96 +67,16 @@ app.get("/profile", userAuth, async (req, res) => {
   }
 })
 
-app.get("/users", async (req, res) => {
-  const userEmail = req.body.firstName;
-  try {
-    const user = await User.findOne({ firstName: userEmail });
-    if (!user) {
-      return res.status(404).send("user not found");
-    } else {
-      res.send(user);
-    }
-    if (user.length === 0) {
-      return res.status(404).send("user not found");
-    } else {
-      res.send(user);
-    }
-  } catch (err) {
-    res.status(404).send("Something went wrong");
+app.post("/userConnectionRequest", userAuth, async (req , res) => {
+  try{
+    const user = req.user;
+    console.log("sending a connection request");
+
+    res.send(user.firstName +" "+ "sent a connection request");
+  }catch(err){
+    res.status(404).send("ERROR :"+ err.message);
   }
-});
-
-app.get("/users", async (req, res) => {
-  const userEmail = req.body.emailId;
-
-  try {
-    const user = await User.find({ emailId: userEmail });
-    if (user.length === 0) {
-      return res.status(404).send("user not found");
-    } else {
-      res.send(user);
-    }
-  } catch (err) {
-    res.status(404).send("Something went wrong");
-  }
-});
-
-app.get("/feed", async (req, res) => {
-  try {
-    const user = await User.find({});
-    res.send(user);
-  } catch (err) {
-    res.status(404).send("Something went wrong");
-  }
-});
-
-app.delete("/delete", async (req, res) => {
-  const userId = req.body.userId;
-  try {
-    const user = await User.findByIdAndDelete(userId);
-    if (!user) {
-      return res.status(404).send("user not found");
-    }
-    res.send("user deleted successfully");
-  } catch (err) {
-    res.status(404).send("Something went wrong");
-  }
-});
-
-app.patch("/update/:userId", async (req, res) => {
-  const userId = req.params?.userId;
-  const updateData = req.body;
-
-  try {
-    const ALLOUDED_UPDATES = [
-      "firstName",
-      "lastName",
-      "skills",
-      "password",
-      "age",
-      "photoUrl",
-      "bio",
-    ];
-    const isUpdateAllowed = Object.keys(updateData).every((k) =>
-      ALLOUDED_UPDATES.includes(k),
-    );
-    if (!isUpdateAllowed) {
-      throw new Error("Update not allowed");
-    }
-    const updatedUser = await User.findByIdAndUpdate(
-      { _id: userId },
-      updateData,
-      {
-        returnDocument: "after",
-        runValidators: true,
-      },
-    );
-    console.log(updatedUser);
-    res.send("user updated successfully");
-  } catch (err) {
-    res.status(404).send("Update failed:" + err.message);
-  }
-});
+})
 
 connectDb()
   .then(() => {
