@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const requestRouter = express.Router();
 
 const {userAuth} = require("../middlewares/auth");
@@ -12,6 +12,6 @@ requestRouter.post("/userConnectionRequest", userAuth, async (req , res) => {
   }catch(err){
     res.status(404).send("ERROR :"+ err.message);
   }
-});
+})
 
 module.exports = requestRouter;
