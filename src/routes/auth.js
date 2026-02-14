@@ -8,7 +8,7 @@ const { validateSignUpData } = require("../utils/validation");
 authRouter.post("/signup", async (req, res) => {
 try {
     validateSignUpData(req);
-    const {firstName, lastName, emailId, gender, password} = req.body;
+    const {firstName, lastName, emailId, gender, password , age, photoUrl, bio, skills} = req.body;
     const hashedPassward = await bcrypt.hash(password, 10);
     console.log(hashedPassward);
 
@@ -17,7 +17,11 @@ try {
       lastName,
       emailId,
       gender,
-      password:hashedPassward
+      password:hashedPassward,
+      age,
+      photoUrl,
+      bio,
+      skills
     });
 
     await user.save();
@@ -47,6 +51,17 @@ authRouter.post("/login", async (req, res) => {
       throw new Error("Invalid Password");
     }
   }catch (err) {
+    res.status(404).send("ERROR :"+ err.message);
+  }
+});
+
+authRouter.post("/logout" , async (req, res) => {
+  try{
+    res.cookie("token", null ,{
+      expires: new Date (Date.now()),
+    });
+    res.send("logout successfull");
+  }catch(err){
     res.status(404).send("ERROR :"+ err.message);
   }
 });

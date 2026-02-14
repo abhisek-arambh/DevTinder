@@ -1,7 +1,7 @@
 const validator =require ("validator");
 
 const validateSignUpData = (req)=>{
-    const {firstName , lastName , emailId , password} = req.body;
+    const {firstName , lastName , emailId , password , gender, age, photoUrl, bio, skills} = req.body;
     if(!firstName || !lastName){
         throw new Error("name is not valid");
     }else if(!validator.isEmail(emailId)){
@@ -16,6 +16,19 @@ const validateSignUpData = (req)=>{
     }
 }
 
+const validateEditProfileData = (req) => {
+    const allowEditableFeilds = [
+        "firstName"  , 
+        "lastName" , 
+        "password" , 
+        "age" , 
+        "photoUrl" , 
+        "bio"];
+
+        const isEditallowed =Object.keys(req.body).every((key) => allowEditableFeilds.includes(key));
+        return isEditallowed;
+}
 module.exports = {
     validateSignUpData,
+    validateEditProfileData,
 }
