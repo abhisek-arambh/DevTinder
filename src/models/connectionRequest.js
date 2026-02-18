@@ -32,9 +32,9 @@ connectionRequestSchema.index({
 
 connectionRequestSchema.pre("save", function(){
 //   const connectionRequest = this;
-  if(this.fromUserId.equals(this.toUserId)){
-    throw new Error("fromUserId and toUserId cannot be same");
-  }
+    if(this.fromUserId.equals(this.toUserId)){
+        throw new Error("fromUserId and toUserId cannot be same");
+    }
 });
 
 
